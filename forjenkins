@@ -1,0 +1,28 @@
+pipeline {
+   agent any
+
+   
+    stages {
+        
+      stage('Validation and Testing') {
+         steps {
+            sh ' mvn clean install'
+         }
+      }
+      
+ 
+      stage('Deploy') {
+         steps {
+            sh 'sudo cp /var/lib/jenkins/.m2/repository/com/sample/LiquorStoreApp/1.0-SNAPSHOT/LiquorStoreApp-1.0-SNAPSHOT.war /var/lib/tomcat/webapps'
+         }
+      }
+   
+         stage('clean up') {
+         steps {
+            sh 'rm -rf * '
+         }
+      }   
+       
+   }
+   
+}
