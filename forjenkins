@@ -1,32 +1,10 @@
-# ppipeline {
-#     agent any
 
-#     stages {
-#         stage ('terraform init'){
-
-#             steps {
-#                 sh 'terraform init'
-#             }
-#         }
-#         stage  ("terraform apply") {
-#             environment { 
-#                 AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
-#                 AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
-#             }
-#             steps {
-#                 sh 'terraform apply -auto-approve'
-#             }
-#         }
-#     }
 
 
 pipeline {
    agent any
 
-    #parameters {
-     #  choice(name: 'CHOICE', choices: ['SIT', 'UAT', 'PREPROD'], description: 'Select Deploy Environment')
-    #}
-
+ 
    stages {
         
       stage('Validation') {
@@ -46,7 +24,8 @@ pipeline {
                 AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
                 AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
             }
-           
+
+        } 
  
       stage('Deploy') {
          steps {
@@ -65,14 +44,3 @@ pipeline {
    
 }
 
-
-
-
-  
-//     post {
-//        always {
-//             sh 'rm -rf *'
-//         }
-  
-//     }
-}
