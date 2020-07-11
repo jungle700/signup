@@ -5,6 +5,7 @@ pipeline {
    agent any
 
  
+
    stages {
         
       stage('Validation') {
