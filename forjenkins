@@ -1,23 +1,74 @@
-ppipeline {
-    agent any
+# ppipeline {
+#     agent any
 
-    stages {
-        stage ('terraform init'){
+#     stages {
+#         stage ('terraform init'){
 
-            steps {
-                sh 'terraform init'
-            }
-        }
-        stage  ("terraform apply") {
+#             steps {
+#                 sh 'terraform init'
+#             }
+#         }
+#         stage  ("terraform apply") {
+#             environment { 
+#                 AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
+#                 AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
+#             }
+#             steps {
+#                 sh 'terraform apply -auto-approve'
+#             }
+#         }
+#     }
+
+
+pipeline {
+   agent any
+
+    #parameters {
+     #  choice(name: 'CHOICE', choices: ['SIT', 'UAT', 'PREPROD'], description: 'Select Deploy Environment')
+    #}
+
+   stages {
+        
+      stage('Validation') {
+         steps {
+            sh 'git clone https://github.com/jungle700/june2020_singup_project.git'
+         }
+      }
+
+     stage('checkout') {
+         steps {
+            sh 'cd june2020_singup_project; pip install -r requirements.txt'
+         }
+      }
+
+     stage('AWS Credential') {
             environment { 
                 AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
                 AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
             }
-            steps {
-                sh 'terraform apply -auto-approve'
-            }
-        }
-    }
+           
+ 
+      stage('Deploy') {
+         steps {
+            sh 'FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=flex-db NEW_SIGNUP_TOPIC=arn:aws:sns:eu-west-1:941743414580:Signup-test flask run --host 0.0.0.0'
+            
+         }
+      }
+   
+         stage('clean up') {
+         steps {
+            sh 'rm -rf * '
+         }
+      }   
+       
+   }
+   
+}
+
+
+
+
+  
 //     post {
 //        always {
 //             sh 'rm -rf *'
