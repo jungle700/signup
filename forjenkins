@@ -1,28 +1,27 @@
-pipeline {
-   agent any
+ppipeline {
+    agent any
 
-   
     stages {
-        
-      stage('Validation and Testing') {
-         steps {
-            sh ' mvn clean install'
-         }
-      }
-      
- 
-      stage('Deploy') {
-         steps {
-            sh 'sudo cp /var/lib/jenkins/.m2/repository/com/sample/LiquorStoreApp/1.0-SNAPSHOT/LiquorStoreApp-1.0-SNAPSHOT.war /var/lib/tomcat/webapps'
-         }
-      }
-   
-         stage('clean up') {
-         steps {
-            sh 'rm -rf * '
-         }
-      }   
-       
-   }
-   
+        stage ('terraform init'){
+
+            steps {
+                sh 'terraform init'
+            }
+        }
+        stage  ("terraform apply") {
+            environment { 
+                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
+                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
+            }
+            steps {
+                sh 'terraform apply -auto-approve'
+            }
+        }
+    }
+//     post {
+//        always {
+//             sh 'rm -rf *'
+//         }
+  
+//     }
 }
