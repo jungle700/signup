@@ -19,15 +19,14 @@ pipeline {
          }
       }
 
-     stage('AWS Credential') {
-            environment { 
+     
+      stage('Deploy') {
+
+          environment { 
                 AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
                 AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
             }
 
-        } 
- 
-      stage('Deploy') {
          steps {
             sh 'FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=flex-db NEW_SIGNUP_TOPIC=arn:aws:sns:eu-west-1:941743414580:Signup-test flask run --host 0.0.0.0'
             
