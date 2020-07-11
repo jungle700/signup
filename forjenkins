@@ -30,7 +30,7 @@ pipeline {
             }
 
          steps {
-            sh 'FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=flex-db NEW_SIGNUP_TOPIC=arn:aws:sns:eu-west-1:941743414580:Signup-test flask run --host 0.0.0.0'
+            sh 'sudo FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=flex-db NEW_SIGNUP_TOPIC=arn:aws:sns:eu-west-1:941743414580:Signup-test flask run --host 0.0.0.0'
             
          }
       }
