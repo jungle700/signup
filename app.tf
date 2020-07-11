@@ -162,8 +162,8 @@ resource "aws_eip" "main2" {
 }
 
 
-resource "aws_dynamodb_table" "next-db" {
-  name           = "next-db"
+resource "aws_dynamodb_table" "sig-db" {
+  name           = "sig-db"
   billing_mode   = "PROVISIONED"
   read_capacity  = 1
   write_capacity = 1
@@ -181,7 +181,7 @@ resource "aws_dynamodb_table" "next-db" {
   }
 
   tags = {
-    Name        = "next-db"
+    Name        = "sig-db"
     Environment = "dev"
   }
 }
