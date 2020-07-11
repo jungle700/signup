@@ -15,7 +15,7 @@ pipeline {
 
      stage('checkout') {
          steps {
-            sh 'cd june2020_singup_project; pip install -r requirements.txt'
+            sh 'cd june2020_singup_project; sudo pip install -r requirements.txt'
          }
       }
 
