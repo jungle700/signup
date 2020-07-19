@@ -1,0 +1,5 @@
+#!/bin/bash
+
+my_arn="arn:aws:sns:eu-west-1:941743414580:Signup-test"
+
+sed  -i "s/TO_BE_PROVIDED/$my_arn/g"  forjenkins

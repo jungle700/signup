@@ -67,19 +67,6 @@ resource "aws_security_group" "app" {
 
   }
 
-  # Jenkins Pipeline
-
-  ingress {
-
-    from_port = 8080
-
-    to_port = 8080
-
-    protocol = "tcp"
-
-    cidr_blocks = ["0.0.0.0/0"]
-
-  }
 
   # Access via SSH
 
@@ -190,23 +177,3 @@ resource "aws_sns_topic" "user_updates" {
   name = "user-updates-topic"
 }
 
-# resource "aws_sns_topic" "user_updates" {
-#   name = "user-updates-topic"
-# }
-
-
-
-# {
-#   "http": {
-#     "defaultHealthyRetryPolicy": {
-#       "minDelayTarget": 20,
-#       "maxDelayTarget": 20,
-#       "numRetries": 3,
-#       "numMaxDelayRetries": 0,
-#       "numNoDelayRetries": 0,
-#       "numMinDelayRetries": 0,
-#       "backoffFunction": "linear"
-#     },
-#     "disableSubscriptionOverrides": false
-#   }
-# }
