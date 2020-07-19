@@ -7,6 +7,20 @@ pipeline {
  
 
    stages {
+
+       stage('ssh') {
+         environment { 
+                AWS_KEYPAIR = credentials('TKAY') 
+            }
+
+
+         steps {
+            sh 'chmod 400 AWS_KEYPAIR' 
+            sh 'ssh -i AWS_KEYPAIR ec2-user@52.30.44.251'
+         }
+      }
+
+
         
       stage('Validation') {
          steps {
