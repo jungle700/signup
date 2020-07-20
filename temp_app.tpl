@@ -14,7 +14,7 @@
 
  service jenkins start
 
-  yum install python-pip -y
+ yum install python-pip -y
 
  pip install flask
 
