@@ -118,13 +118,13 @@ resource "aws_security_group" "app" {
 
 
 
-resource "aws_key_pair" "tkay" {
+# resource "aws_key_pair" "tkay" {
 
-  key_name = "tkay"
+#   key_name = "tkay"
 
-  public_key = file(var.path_to_public_key)
+#   public_key = file(var.path_to_public_key)
 
-}
+# }
 
 data "template_file" "myuserdata1" {
 
@@ -150,7 +150,7 @@ resource "aws_instance" "app" {
 
   tags = {
 
-    Name = "App_Server"
+    Name = "App_Server1"
 
   }
 
@@ -162,33 +162,33 @@ resource "aws_eip" "main2" {
 }
 
 
-resource "aws_dynamodb_table" "sig-db" {
-  name           = "sig-db"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 1
-  write_capacity = 1
-  hash_key       = "name"
-  range_key      = "email"
+# resource "aws_dynamodb_table" "sig-db" {
+#   name           = "sig-db"
+#   billing_mode   = "PROVISIONED"
+#   read_capacity  = 1
+#   write_capacity = 1
+#   hash_key       = "name"
+#   range_key      = "email"
 
-  attribute {
-    name = "name"
-    type = "S"
-  }
+#   attribute {
+#     name = "name"
+#     type = "S"
+#   }
 
-  attribute {
-    name = "email"
-    type = "S"
-  }
+#   attribute {
+#     name = "email"
+#     type = "S"
+#   }
 
-  tags = {
-    Name        = "sig-db"
-    Environment = "dev"
-  }
-}
+#   tags = {
+#     Name        = "sig-db"
+#     Environment = "dev"
+#   }
+# }
 
-resource "aws_sns_topic" "user_updates" {
-  name = "user-updates-topic"
-}
+# resource "aws_sns_topic" "user_updates" {
+#   name = "user-updates-topic"
+# }
 
 # resource "aws_sns_topic" "user_updates" {
 #   name = "user-updates-topic"
