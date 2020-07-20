@@ -10,7 +10,7 @@ pipeline {
 
        stage('ssh') {
          steps {
-             sh 'ssh 10.0.1.137'
+             sh 'ssh -tt 10.0.1.137 '
          }
       }
 
