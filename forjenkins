@@ -9,8 +9,8 @@ pipeline {
       node {
        sshagent (credentials: ['ec2-user']) {
          sh 'ssh -o StrictHostKeyChecking=no -i ec2-user@52.30.44.251'
-         }
-     }
+               }
+           }
 
       stage('Validation') {
          steps {
