@@ -11,7 +11,7 @@ pipeline {
       stage('Validation') {
          steps {
             sh 'rm -r june2020_singup_project || true' 
-            sh 'kill -9 $( ps -ef | grep flask | grep -v grep | awk '{ print $2 }') || true'
+    //      sh 'kill -9 $( ps -ef | grep flask | grep -v grep | awk '{ print $2 }') || true'
             sh 'git clone https://github.com/jungle700/june2020_singup_project.git'
          }
       }
