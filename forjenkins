@@ -6,29 +6,42 @@ pipeline {
 
   stages{
 
-   stage('sshUserPrivateKey') {
-      steps {
-        script {
-          withCredentials([
-            sshUserPrivateKey(
-              credentialsId: 'PRIVATE_KEY',
-              keyFileVariable: 'keyFile',
-              passphraseVariable: 'passphrase',
-              usernameVariable: 'username')
-          ]) 
-           {
-            print 'keyFile=' + keyFile
-            
-            print 'username=' + username
-            
-            print 'keyFileContent=' + readFile(keyFile)
+     stage('sshUserPrivateKey') {
 
-            sh 'ssh -i keyFile  ec2-user@52.30.44.251'
-        //    sh 'ssh -o StrictHostKeyChecking=no ec2-user@18.132.207.94 ${startApp}'
+        steps{
+
+            sshagent(['ec2-user']) {
+              sh 'ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251'
+              echo 'code Deployed'
           }
+
         }
-      }
-    }
+
+     } 
+
+  // stage('sshUserPrivateKey') {
+  //    steps {
+  //      script {
+  //        withCredentials([
+  //          sshUserPrivateKey(
+  //            credentialsId: 'PRIVATE_KEY',
+  //            keyFileVariable: 'keyFile',
+  //            passphraseVariable: 'passphrase',
+  //            usernameVariable: 'username')
+  //        ]) 
+  //         {
+  //          print 'keyFile=' + keyFile
+            
+  //          print 'username=' + username
+            
+  //          print 'keyFileContent=' + readFile(keyFile)
+
+  //          sh 'ssh -i keyFile  ec2-user@52.30.44.251'
+  //          sh 'ssh -o StrictHostKeyChecking=no ec2-user@18.132.207.94 ${startApp}'
+  //        }
+  //      }
+  //    }
+  //  }
             
 
  
