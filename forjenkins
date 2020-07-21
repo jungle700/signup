@@ -11,7 +11,7 @@ pipeline {
         steps{
 
             sshagent(['PRIVATE_KEY']) {
-              sh 'ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251; mkdir laide; mkdir jide'
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'mkdir jay; touch aka.txt' "
                 
           }
 
