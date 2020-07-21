@@ -4,13 +4,31 @@
 pipeline {
    agent any
 
- 
+  stages{
 
-      node {
-       sshagent (credentials: ['ec2-user']) {
-         sh 'ssh -o StrictHostKeyChecking=no -i ec2-user@52.30.44.251'
-               }
-           }
+   stage('sshUserPrivateKey') {
+      steps {
+        script {
+          withCredentials([
+            sshUserPrivateKey(
+              credentialsId: 'PRIVATE_KEY',
+              keyFileVariable: 'keyFile',
+              passphraseVariable: 'passphrase',
+              usernameVariable: 'username')
+          ]) 
+           {
+            print 'keyFile=' + keyFile
+            
+            print 'username=' + username
+            
+            print 'keyFileContent=' + readFile(keyFile)
+          }
+        }
+      }
+    }
+            
+
+ 
 
       stage('Validation') {
          steps {
@@ -29,17 +47,8 @@ pipeline {
          steps {
             sh 'cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0 &'
          }
-      }
-
-           stage('clean up') {
-         steps {
-            sh 'rm -rf * '
-         }
-      }   
-       
+      }      
    }
-   
-
 }
 
 
