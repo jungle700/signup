@@ -6,19 +6,23 @@ pipeline {
 
   stages{
 
-     stage('sshUserPrivateKey') {
+
+       stage('sshUserPrivateKey') {
 
         steps{
 
             sshagent(['PRIVATE_KEY']) {
-              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'mkdir jay; touch aka.txt' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'mkdir nino; 
+              touch aka.txt; mkdir aye' "
                 
           }
 
         }
 
-     } 
+       }
 
+     
+   
  
       stage('Validation') {
          steps {
@@ -38,7 +42,12 @@ pipeline {
             sh 'cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0'
          }
       }      
+   
+     
+          
+
    }
+
 }
 
 
