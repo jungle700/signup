@@ -4,6 +4,12 @@
 pipeline {
    agent any
 
+    environment { 
+                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
+                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
+                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:user-updates-topic"
+            }
+
   stages{
 
 
@@ -12,7 +18,7 @@ pipeline {
         steps{
 
             sshagent(['PRIVATE_KEY']) {
-              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'mkdir nino; touch aka.txt; mkdir aye' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'rm -r june2020_singup_project || true; git clone https://github.com/jungle700/june2020_singup_project.git; cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0' "
               
                 
           }
@@ -24,24 +30,20 @@ pipeline {
      
    
  
-      stage('Validation') {
-         steps {
-            sh 'rm -r june2020_singup_project || true' 
-            sh 'git clone https://github.com/jungle700/june2020_singup_project.git'
-         }
-      }
+    //  stage('Validation') {
+    //     steps {
+   //         sh 'rm -r june2020_singup_project || true' 
+   //         sh 'git clone https://github.com/jungle700/june2020_singup_project.git'
+   //      }
+   //   }
 
-     stage('checkout') {
+   //  stage('checkout') {
 
-          environment { 
-                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
-                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
-                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:user-updates-topic"
-            }
-         steps {
-            sh 'cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0'
-         }
-      }      
+         
+    //     steps {
+    //        sh 'cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0'
+    //     }
+    //  }      
    
      
           
