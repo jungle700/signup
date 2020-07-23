@@ -4,16 +4,18 @@
 pipeline {
    agent any
 
-    environment { 
-                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
-                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
-                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:user-updates-topic"
-            }
+   
 
   stages{
 
 
        stage('sshUserPrivateKey') {
+
+           environment { 
+                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
+                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
+                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:user-updates-topic"
+            }
 
         steps{
 
