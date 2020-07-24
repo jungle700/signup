@@ -22,7 +22,8 @@ pipeline {
            withCredentials([string(credentialsId: 'ACCESS_KEY' , variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'SECRET_KEY' , variable: 'AWS_SECRET_ACCESS_KEY')]) {
 
             sshagent(['PRIVATE_KEY']) {
-              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID && AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' "
               sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'rm -r june2020_singup_project || true; git clone https://github.com/jungle700/june2020_singup_project.git; cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0' "
               
 
