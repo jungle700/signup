@@ -1,0 +1,113 @@
+pipeline {
+   agent any
+
+   
+
+  stages{
+
+
+       stage('sshUserPrivateKey') {
+
+           environment { 
+       //         AWS_ACCESS_KEY_ID = credentials('ACCESS') 
+       //         AWS_SECRET_ACCESS_KEY = credentials('SECRET') 
+                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:user-updates-topic"
+                
+            }
+
+        steps {
+
+           withCredentials([string(credentialsId: 'ACCESS' , variable: 'AWS_ACCESS_KEY_ID'), string(credentialsId: 'SECRET' , variable: 'AWS_SECRET_ACCESS_KEY')]) {
+
+            sshagent(['PRIVATE_KEY']) {
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY' "
+              sh "ssh -o StrictHostKeyChecking=no ec2-user@52.30.44.251 'rm -r june2020_singup_project || true; git clone https://github.com/jungle700/june2020_singup_project.git; cd june2020_singup_project; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0' "
+              
+
+            } 
+          }
+
+        }
+
+       }
+
+
+
+   }
+
+}
+
+
+pipeline {
+   agent any
+
+ 
+
+   stages {
+        
+      stage('Validation') {
+         steps {
+            sh 'rm -r codebase || true' 
+           
+            sh 'git clone https://github.com/jungle700/june2020_singup_project.git codebase' 
+         }
+      }
+
+     stage('checkout') {
+
+          environment { 
+                AWS_ACCESS_KEY_ID = credentials('ACCESS_KEY') 
+                AWS_SECRET_ACCESS_KEY = credentials('SECRET_KEY') 
+                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:Signup-test"
+                //New_APP = 'FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0 &'
+                
+            }
+         steps {
+            sh 'cd codebase; sudo pip install -r requirements.txt || true; FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0'
+         }
+      }
+
+     
+           
+   }
+      
+}
+
+ withCredentials([sshUserPrivateKey(credentialsId: "PRIVATE_KEY", keyFileVariable: 'keyfile')]) {
+       stage('scp-f/b') {
+        sh "scp -i ${keyfile} -r codebase do sth here"
+       }
+   }
+
+ //    sshagent(['ec2-user']) {
+    //        sh 'scp -r codebase ec2-user@ec2-52-56-152-110.eu-west-2.compute.amazonaws.com && cd codebase'
+    //        sh 'pip install -r requirements.txt && ${startApp}'
+    //     /  sh 'ssh -o StrictHostKeyChecking=no ec2-user@18.132.207.94 ${startApp}'
+    //     echo 'code Deployed'
+
+
+ stage('checkout') {
+         
+         
+
+          environment { 
+                AWS_ACCESS_KEY_ID = credentials('ACCESS') 
+                AWS_SECRET_ACCESS_KEY = credentials('SECRET') 
+                SIGNUP_TOPIC = "arn:aws:sns:eu-west-1:941743414580:Signup-test"
+                FLASK_APP=application.py AWS_REGION=eu-west-1 STARTUP_SIGNUP_TABLE=sig-db NEW_SIGNUP_TOPIC=$SIGNUP_TOPIC flask run --host 0.0.0.0 &'
+                
+            }
+         steps {
+            sh 'cd codebase; sudo pip install -r requirements.txt || true; ${FLASK_APP}'
+         }
+      }
+
+      stage('Deploy Application'){
+    //    def  startApp = 'FLASK_APP=application.py AWS_REGION=eu-west-2 STARTUP_SIGNUP_TABLE=dev-user-signup-dynamo NEW_SIGNUP_TOPIC=arn:aws:sns:eu-west-2:735287868690:dev-user-signup-topic flask run --host 0.0.0.0'
+    //    sshagent(['ec2-user']) {
+    //        sh 'scp -r codebase ec2-user@ec2-52-56-152-110.eu-west-2.compute.amazonaws.com && cd codebase'
+    //        sh 'pip install -r requirements.txt && ${startApp}'
+    //     /  sh 'ssh -o StrictHostKeyChecking=no ec2-user@18.132.207.94 ${startApp}'
+    //     echo 'code Deployed'
+    //  }
